@@ -21,7 +21,6 @@ Or on Ubuntu / Bash on Windows (WSL) using:
 (not tested on Windows, but should work!)
 
 #### Example
-> (from [An Outsider's Guide to Statically Typed Functional Programming](https://leanpub.com/outsidefp))
 
 Before (11.1MB) |  After (7.23MB)
 :--------------:|:---------------:
