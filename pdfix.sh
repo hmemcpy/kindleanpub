@@ -3,19 +3,21 @@
 # https://github.com/hmemcpy/kindleanpub
 # Licensed under the 3-clause BSD license, see LICENSE
 #
-# Copyright (c) 2018, Alfred Klomp, Igal Tabachnik
+# Copyright (c) 2018, Igal Tabachnik
 # All rights reserved.
 
 # Fixes garbled image rendering from LeanPub PDFs on older Kindle devices (e.g. Kindle DX),
 # by recompressing the images using JPEG with highest quality.
 # The resulting PDF will be smaller, and will render correctly on Kindle devices.
 
-# Original code from http://www.alfredklomp.com/programming/shrinkpdf/
-# Modified with command taken from https://stackoverflow.com/questions/40849325/ghostscript-pdfwrite-specify-jpeg-quality
+# Original code by Alfred Klomp, http://www.alfredklomp.com/programming/shrinkpdf/
 
 fix ()
 {
 	echo "Converting $IFILE > $OFILE"
+
+	# Converting using high quality, color preserving, 300 dpi imgs
+	# see https://stackoverflow.com/questions/40849325/ghostscript-pdfwrite-specify-jpeg-quality
 
 	gs									\
 		-sOutputFile="$2"				\
@@ -28,9 +30,9 @@ fix ()
 
 usage ()
 {
-	echo "Reduces PDF filesize by lossy recompressing with Ghostscript."
-	echo "Not guaranteed to succeed, but usually works."
-	echo "  Usage: $1 infile"
+	echo "Reduces PDF filesize by lossy recompressing images to JPEG with Ghostscript."
+	echo "Fixes rendering issues with Leanpub PDFs on older Kindle devices."
+	echo "  Usage: $1 infile [outfile]"
 }
 
 IFILE="$1"
@@ -41,7 +43,7 @@ if [ -z "$IFILE" ]; then
 	exit 1
 fi
 
-# Output filename defaults to "-" (stdout) unless given:
+# Output filename defaults to "inputfile-fixed.pdf" unless given:
 if [ ! -z "$2" ]; then
 	OFILE="$2"
 else
