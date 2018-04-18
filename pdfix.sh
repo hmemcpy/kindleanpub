@@ -13,7 +13,7 @@
 # Original code from http://www.alfredklomp.com/programming/shrinkpdf/
 # Modified with command taken from https://stackoverflow.com/questions/40849325/ghostscript-pdfwrite-specify-jpeg-quality
 
-shrink ()
+fix ()
 {
 	echo "Converting $IFILE > $OFILE"
 
@@ -24,21 +24,6 @@ shrink ()
 		-dPDFSETTINGS=/prepress			\
 		-c ".setpdfwrite << /ColorACSImageDict << /VSamples [ 1 1 1 1 ] /HSamples [ 1 1 1 1 ] /QFactor 0.08 /Blend 1 >> /ColorImageDownsampleType /Bicubic /ColorConversionStrategy /LeaveColorUnchanged >> setdistillerparams"	\
 		-f "$1"
-}
-
-check_smaller ()
-{
-	# If $1 and $2 are regular files, we can compare file sizes to
-	# see if we succeeded in shrinking. If not, we copy $1 over $2:
-	if [ ! -f "$1" -o ! -f "$2" ]; then
-		return 0;
-	fi
-	ISIZE="$(echo $(wc -c "$1") | cut -f1 -d\ )"
-	OSIZE="$(echo $(wc -c "$2") | cut -f1 -d\ )"
-	if [ "$ISIZE" -lt "$OSIZE" ]; then
-		echo "Input smaller than output, doing straight copy" >&2
-		cp "$1" "$2"
-	fi
 }
 
 usage ()
@@ -63,6 +48,4 @@ else
 	OFILE="${IFILE%.pdf}-fixed.pdf"
 fi
 
-shrink "$IFILE" "$OFILE" || exit $?
-
-check_smaller "$IFILE" "$OFILE"
+fix "$IFILE" "$OFILE" || exit $?
